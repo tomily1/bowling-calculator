@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-class UsersController < ApplicationController
+class V1::UsersController < ApplicationController
   def create; end
+  def update; end
 
   private
 
