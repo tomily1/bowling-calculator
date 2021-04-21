@@ -1,10 +1,25 @@
 # frozen_string_literal: true
 
 module HasBowling
-  serialize :frames, Array
+
+  def pin_value(knocked_pins)
+    case knocked_pins.to_s.upcase
+    when 'X'
+      10
+    when '/'
+      10 - (frames.compact.last)
+    when '-'
+      0
+    else
+      knocked_pins.to_i
+    end
+  end
 
   def roll(knocked_pins)
-    frames << knocked_pins
+    pin_number_valid?(knocked_pins.to_s.upcase)
+    return if errors.present?
+
+    frames << pin_value(knocked_pins)
   end
 
   def calculate_score
