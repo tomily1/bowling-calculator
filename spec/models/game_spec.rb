@@ -26,9 +26,10 @@ describe Game, type: :model do
 
     context 'one spare game' do
       it 'calculates the total' do
-        game.roll(7)
+        game.roll(5)
+        game.roll(5)
         game.roll(3)
-        game.roll(3)
+        roll_many(17, 0)
         expect(game.calculate_score).to eq(16)
       end
     end

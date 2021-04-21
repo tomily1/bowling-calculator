@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2021_04_20_175234) do
 
   create_table "games", force: :cascade do |t|
     t.bigint "user_id"
-    t.jsonb "frames"
+    t.string "frames"
     t.integer "cumulative_score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
