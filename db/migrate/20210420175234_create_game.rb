@@ -5,9 +5,8 @@ class CreateGame < ActiveRecord::Migration[6.1]
     create_table :games do |t|
       t.belongs_to :user
 
-      t.integer :frame
+      t.string :frames
       t.integer :cumulative_score
-      t.integer :next_count
 
       t.timestamps
     end

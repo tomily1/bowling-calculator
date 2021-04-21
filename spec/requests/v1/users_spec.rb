@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'POST v1/users', type: :request do
+  let!(:user) { create(:user) }
+
   it 'creates a new user' do
-    post '/v1/users', params: { name: 'Israel' }
+    post '/v1/users', params: { users: { name: 'Israel' } }
 
     expect(response.code).to eq '201'
   end
 
-  it "updates user name" do
-    user = create(:user)
+  it 'updates user name' do
+    put "/v1/users/#{user.id}", params: { users: { name: 'Israel' } }
 
-    put "/v1/users/#{user.id}", params: { name: 'Israel' }
-
-    expect(response.code).to eq '201'
+    expect(response.code).to eq '200'
 
     record = User.where(name: 'Israel')
 

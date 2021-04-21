@@ -1,12 +1,31 @@
 # frozen_string_literal: true
 
-class V1::UsersController < ApplicationController
-  def create; end
-  def update; end
+module V1
+  class UsersController < ApplicationController
+    def create
+      user = User.new(name: user_params[:name])
 
-  private
+      if user.save
+        render json: { name: user.name }, status: :created
+      else
+        render json: { errors: user.errors }, status: :unprocessible_entity
+      end
+    end
 
-  def user_params
-    params.require(:users).permit(:name)
+    def update
+      user = User.find_by(id: params[:id])
+
+      if user.update(name: user_params[:name])
+        render json: { name: user.name }, status: :ok
+      else
+        render json: { errors: user.errors }, status: :unprocessible_entity
+      end
+    end
+
+    private
+
+    def user_params
+      params.require(:users).permit(:name)
+    end
   end
 end

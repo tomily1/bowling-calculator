@@ -17,9 +17,8 @@ ActiveRecord::Schema.define(version: 2021_04_20_175234) do
 
   create_table "games", force: :cascade do |t|
     t.bigint "user_id"
-    t.integer "frame"
+    t.jsonb "frames"
     t.integer "cumulative_score"
-    t.integer "next_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_games_on_user_id"
