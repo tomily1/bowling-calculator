@@ -50,5 +50,12 @@ describe Game, type: :model do
         expect(game.calculate_score).to eq(300)
       end
     end
+
+    context 'invalid game' do
+      it 'returns an error' do
+        game.roll(-3)
+        expect(game.errors.full_messages).to include('Invalid pin value X or x or / or - or (0 to 9)')
+      end
+    end
   end
 end

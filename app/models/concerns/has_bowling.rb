@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module HasBowling
-
   def pin_value(knocked_pins)
     case knocked_pins.to_s.upcase
     when 'X'
       10
     when '/'
-      10 - (frames.compact.last)
+      10 - frames.compact.last
     when '-'
       0
     else
@@ -37,6 +36,8 @@ module HasBowling
         score += sum_of_balls_in_frame(frame_index)
         frame_index += 2
       end
+
+      break if frames[frame_index].nil?
     end
 
     score
