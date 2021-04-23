@@ -6,7 +6,7 @@ module HasBowling
     when 'X'
       10
     when '/'
-      10 - frames.compact.last
+      10 - frames.flatten.last
     when '-'
       0
     else
@@ -18,7 +18,21 @@ module HasBowling
     pin_number_valid?(knocked_pins.to_s.upcase)
     return if errors.present?
 
-    frames << pin_value(knocked_pins)
+    last_frame = frames.last
+
+    if last_frame.nil?
+      frames << [pin_value(knocked_pins)]
+    elsif frames.count == 10 && last_frame.sum == 10 && last_frame.count < 3
+      frames.last << pin_value(knocked_pins)
+    elsif (last_frame.count == 1 && last_frame[0] == 10)
+      frames << [pin_value(knocked_pins)]
+    elsif (last_frame.count == 2 && frames.count < 10)
+      frames << [pin_value(knocked_pins)]
+    else
+      frames.last << pin_value(knocked_pins)
+    end
+
+    save
   end
 
   def calculate_score
@@ -37,7 +51,7 @@ module HasBowling
         frame_index += 2
       end
 
-      break if frames[frame_index].nil?
+      break if frames.flatten[frame_index].nil?
     end
 
     score
@@ -64,6 +78,6 @@ module HasBowling
   end
 
   def point_at(index)
-    frames[index].to_i
+    frames.flatten[index].to_i
   end
 end

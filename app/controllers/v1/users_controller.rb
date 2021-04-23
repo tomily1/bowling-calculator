@@ -6,9 +6,9 @@ module V1
       user = User.new(name: user_params[:name])
 
       if user.save
-        render json: { name: user.name }, status: :created
+        render json: { name: user.name, game_id: user.game.id }, status: :created
       else
-        render json: { errors: user.errors }, status: :unprocessible_entity
+        render json: { errors: user.errors }, status: :unprocessable_entity
       end
     end
 
@@ -25,7 +25,7 @@ module V1
     private
 
     def user_params
-      params.require(:users).permit(:name)
+      params.require(:user).permit(:name)
     end
   end
 end
