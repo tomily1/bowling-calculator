@@ -15,6 +15,7 @@ module HasBowling
   end
 
   def roll(knocked_pins)
+    spare_pin_valid?(knocked_pins.to_s.upcase)
     pin_number_valid?(knocked_pins.to_s.upcase)
     return if errors.present?
 
@@ -24,9 +25,9 @@ module HasBowling
       frames << [pin_value(knocked_pins)]
     elsif frames.count == 10 && last_frame.sum == 10 && last_frame.count < 3
       frames.last << pin_value(knocked_pins)
-    elsif (last_frame.count == 1 && last_frame[0] == 10)
+    elsif last_frame.count == 1 && last_frame[0] == 10
       frames << [pin_value(knocked_pins)]
-    elsif (last_frame.count == 2 && frames.count < 10)
+    elsif last_frame.count == 2 && frames.count < 10
       frames << [pin_value(knocked_pins)]
     else
       frames.last << pin_value(knocked_pins)
