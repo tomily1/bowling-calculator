@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   namespace :v1 do
     resources :users, only: %i[create update]
-    resources :games, only: %i[show create update]
+    resources :games, only: %i[show create update] do
+      get :score, on: :member
+    end
   end
 end
