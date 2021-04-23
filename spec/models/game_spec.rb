@@ -69,9 +69,11 @@ describe Game, type: :model do
         expect(game.errors.full_messages).to include('Max number of knocked pins reached for round 10. Game Over!')
       end
 
-      it 'should only allow two tries for the 10th game if no spare or strike' do
+      it 'should allow only two tries for the 10th game if no spare or strike' do
         roll_many(20, 1)
-        # binding.pry
+        game.roll(1)
+        
+        expect(game.errors.full_messages).to include('Max number of knocked pins reached for round 10. Game Over!')
       end
     end
   end
