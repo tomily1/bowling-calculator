@@ -9,10 +9,20 @@ module V1
 
       if game
         if game.roll(game_params[:pins])
-          render status: :ok
+          render json: { game_id: game.id }, status: :ok
         else
           render json: { errors: game.errors }, status: :unprocessable_entity
         end
+      else
+        render json: { errors: 'game not found' }, status: :not_found
+      end
+    end
+
+    def score
+      game = Game.find_by(id: params[:id])
+
+      if game
+        render json: { score: game.cumulative_score, game_id: game.id }, status: :ok
       else
         render json: { errors: 'game not found' }, status: :not_found
       end
