@@ -9,6 +9,7 @@ module V1
 
       if game
         if game.roll(game_params[:pins])
+          BowlingCalculatorWorker.perform_async(game.id)
           render json: { game_id: game.id }, status: :ok
         else
           render json: { errors: game.errors }, status: :unprocessable_entity
@@ -22,7 +23,8 @@ module V1
       game = Game.find_by(id: params[:id])
 
       if game
-        render json: { score: game.cumulative_score, game_id: game.id }, status: :ok
+        BowlingCalculatorWorker.perform_async(game.id)
+        render json: { score: game.cumulative_score.to_i, game_id: game.id }, status: :ok
       else
         render json: { errors: 'game not found' }, status: :not_found
       end

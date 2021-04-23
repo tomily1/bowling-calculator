@@ -20,7 +20,7 @@ module HasBowlingCalculator
       break if frames.flatten[frame_index].nil?
     end
 
-    score
+    self.cumulative_score = score
   end
 
   private
