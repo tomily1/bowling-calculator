@@ -2,35 +2,33 @@
 
 module V1
   class GamesController < ApplicationController
-    def show; end
+    before_action :fetch_game
+
+    def show
+      render json: { game_id: @game.id, frames: @game.frames }, status: :ok
+    end
 
     def update
-      game = Game.find_by(id: params[:id])
-
-      if game
-        if game.roll(game_params[:pins])
-          BowlingCalculatorWorker.perform_async(game.id)
-          render json: { game_id: game.id }, status: :ok
-        else
-          render json: { errors: game.errors }, status: :unprocessable_entity
-        end
+      if @game.roll(game_params[:pins])
+        BowlingCalculatorWorker.perform_async(@game.id)
+        render json: { game_id: @game.id, frames: @game.frames }, status: :ok
       else
-        render json: { errors: 'game not found' }, status: :not_found
+        render json: { errors: @game.errors }, status: :unprocessable_entity
       end
     end
 
     def score
-      game = Game.find_by(id: params[:id])
-
-      if game
-        BowlingCalculatorWorker.perform_async(game.id)
-        render json: { score: game.cumulative_score.to_i, game_id: game.id }, status: :ok
-      else
-        render json: { errors: 'game not found' }, status: :not_found
-      end
+      BowlingCalculatorWorker.perform_async(@game.id)
+      render json: { score: @game.cumulative_score.to_i, game_id: @game.id }, status: :ok
     end
 
     private
+
+    def fetch_game
+      @game = Game.find_by(id: params[:id])
+
+      render json: { errors: 'game not found' }, status: :not_found unless @game
+    end
 
     def game_params
       params.require(:game).permit(:pins)

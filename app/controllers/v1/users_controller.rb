@@ -2,6 +2,8 @@
 
 module V1
   class UsersController < ApplicationController
+    before_action :fetch_user, except: :create
+
     def create
       user = User.new(name: user_params[:name])
 
@@ -13,30 +15,28 @@ module V1
     end
 
     def update
-      user = User.find_by(id: params[:id])
-
-      return render json: { errors: 'user not found' }, status: :not_found unless user
-
-      if user.update(name: user_params[:name])
-        render json: { name: user.name }, status: :ok
+      if @user.update(name: user_params[:name])
+        render json: { name: @user.reload.name }, status: :ok
       else
-        render json: { errors: user.errors }, status: :unprocessible_entity
+        render json: { errors: @user.errors }, status: :unprocessible_entity
       end
     end
 
     def destroy
-      user = User.find_by(id: params[:id])
-
-      return render json: { errors: 'user not found' }, status: :not_found unless user
-
-      if user.destroy
+      if @user.destroy
         render status: :ok
       else
-        render json: { errors: user.errors }, status: :unprocessible_entity
+        render json: { errors: @user.errors }, status: :unprocessible_entity
       end
     end
 
     private
+
+    def fetch_user
+      @user = User.find_by(id: params[:id])
+
+      return render json: { errors: 'user not found' }, status: :not_found unless @user
+    end
 
     def user_params
       params.require(:user).permit(:name)
