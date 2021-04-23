@@ -1,4 +1,6 @@
 # README
+[![Build Status](https://travis-ci.com/tomily1/bowling-calculator.svg?branch=master)](https://travis-ci.com/tomily1/bowling-calculator)
+
 A simple API for recording bowling game scores and the overall scores
 
 ### Requirements
