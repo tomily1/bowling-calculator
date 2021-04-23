@@ -11,6 +11,8 @@ describe 'POST v1/game', type: :request do
       ['9', '/', 'X', 'X', 'X', '3', '-', '7', '/', 4, '/', 'X', 8, '/', 'X'].each do |knocked_pins|
         put "/v1/games/#{user.game.id}", params: { game: { pins: knocked_pins } }
 
+        expect(BowlingCalculatorWorker).to have_enqueued_sidekiq_job(user.game.id)
+
         expect(response.code).to eq '200'
       end
 
@@ -23,6 +25,8 @@ describe 'POST v1/game', type: :request do
       ['x', 'x'].each do |knocked_pins|
         put "/v1/games/#{user.game.id}", params: { game: { pins: knocked_pins } }
 
+        expect(BowlingCalculatorWorker).to have_enqueued_sidekiq_job(user.game.id)
+
         expect(response.code).to eq '200'
       end
 
@@ -32,11 +36,26 @@ describe 'POST v1/game', type: :request do
     end
   end
 
+  context 'invalid game id' do
+
+    it 'does not update the game frames' do
+      ['1', '2'].each do |knocked_pins|
+        put "/v1/games/test", params: { game: { pins: knocked_pins } }
+
+        expect(BowlingCalculatorWorker).not_to have_enqueued_sidekiq_job(user.game.id)
+
+        expect(response.code).to eq '404'
+      end
+    end
+  end
+
   context 'invalid sequence' do
 
     it 'does not update the game frames' do
       ['/', '/'].each do |knocked_pins|
         put "/v1/games/#{user.game.id}", params: { game: { pins: knocked_pins } }
+
+        expect(BowlingCalculatorWorker).not_to have_enqueued_sidekiq_job(user.game.id)
 
         expect(response.code).to eq '422'
       end
