@@ -15,8 +15,22 @@ module V1
     def update
       user = User.find_by(id: params[:id])
 
+      return render json: { errors: 'user not found' }, status: :not_found unless user
+
       if user.update(name: user_params[:name])
         render json: { name: user.name }, status: :ok
+      else
+        render json: { errors: user.errors }, status: :unprocessible_entity
+      end
+    end
+
+    def destroy
+      user = User.find_by(id: params[:id])
+
+      return render json: { errors: 'user not found' }, status: :not_found unless user
+
+      if user.destroy
+        render status: :ok
       else
         render json: { errors: user.errors }, status: :unprocessible_entity
       end
