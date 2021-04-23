@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe Game, type: :model do
-  let(:game) { described_class.new }
+  let(:game) { described_class.new(user: build(:user)) }
 
   describe '#calculate_score' do
     def roll_many(count, knocked_pins)
@@ -51,10 +51,27 @@ describe Game, type: :model do
       end
     end
 
-    context 'invalid game' do
-      it 'returns an error' do
-        game.roll(-3)
+    context 'for valid game' do
+    end
+
+    context 'for invalid game' do
+      it 'should return an error for more than 10 pins input' do
+        game.roll(30)
         expect(game.errors.full_messages).to include('Invalid pin value X or x or / or - or (0 to 9)')
+      end
+
+      it 'should return an error for more than 21 rolls for valid extra roll' do
+        roll_many(19, 3)
+        roll_many(2, 7)
+
+        expect(game.roll(3)).to be_falsey
+
+        expect(game.errors.full_messages).to include('Max number of knocked pins reached for round 10. Game Over!')
+      end
+
+      it 'should only allow two tries for the 10th game if no spare or strike' do
+        roll_many(20, 1)
+        # binding.pry
       end
     end
   end

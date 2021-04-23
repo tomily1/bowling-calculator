@@ -6,13 +6,13 @@ describe 'POST v1/users', type: :request do
   let!(:user) { create(:user) }
 
   it 'creates a new user' do
-    post '/v1/users', params: { users: { name: 'Israel' } }
+    post '/v1/users', params: { user: { name: 'Israel' } }
 
     expect(response.code).to eq '201'
   end
 
   it 'updates user name' do
-    put "/v1/users/#{user.id}", params: { users: { name: 'Israel' } }
+    put "/v1/users/#{user.id}", params: { user: { name: 'Israel' } }
 
     expect(response.code).to eq '200'
 
