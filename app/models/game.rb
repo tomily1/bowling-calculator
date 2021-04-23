@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Game < ApplicationRecord
-  belongs_to :user, inverse_of: :game
+  belongs_to :user, inverse_of: :game, dependent: :destroy
 
   serialize :frames, Array
 
@@ -10,7 +10,7 @@ class Game < ApplicationRecord
   include HasBowling
 
   def pin_number_valid?(knocked_pins)
-    return if (knocked_pins =~ ALLOWED_PINS_REGEX) && knocked_pins.to_i >= 0
+    return if (knocked_pins =~ ALLOWED_PINS_REGEX) && knocked_pins.to_i >= 0 && knocked_pins.to_i < 10
 
     errors.add(:base, 'Invalid pin value X or x or / or - or (0 to 9)')
   end
