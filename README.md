@@ -27,14 +27,16 @@ A simple API for recording bowling game scores and the overall scores
 1. clone this respository `git clone git@github.com:tomily1/bowling-calculator.git`.
 2. Open the cloned directory with `cd bowling-calculator`.
 3. Run `bundle install` to install dependencies
-4. Run `bundle exec sidekiq` (Make sure you have redis running)
+4. Install and start the redis server
+5. Run `bundle exec sidekiq` (Make sure you have redis running)
 
 On another terminal run the following in the project directory
 
 5. Run `rails db:setup` to setup the database (N.B postgresql is used for database)
-6. Run `rails db:seed` to load the database with sample data
-7. Run the app with `rails server`
-8. The app will be available on `localhost:3000`
+6. Run `rails db:migrate`
+7. Run `rails db:seed` to load the database with sample data
+8. Run the app with `rails server`
+9. The app will be available on `localhost:3000`
 
 ### Endpoints
 
