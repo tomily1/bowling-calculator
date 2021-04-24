@@ -25,13 +25,16 @@ module HasBowling
 
     build_frame_for(knocked_pins)
 
-    save
+    valid? && save
   end
 
   def build_frame_for(knocked_pins)
     last_frame = frames.last
 
-    if frames.count < 10 && (last_frame.nil? || last_frame.count == 2 || last_frame.sum == 10)
+    if frames.count < MAX_ALLOWED_FRAMES &&
+       (last_frame.nil? ||
+         last_frame.count == 2 ||
+         last_frame.sum == MAX_ALLOWED_FRAMES)
       add_new_frame_for(knocked_pins)
     else
       add_score_for_frame(knocked_pins)
