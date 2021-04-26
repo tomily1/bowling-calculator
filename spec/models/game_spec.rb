@@ -51,12 +51,14 @@ describe Game, type: :model do
       end
     end
 
-    context 'for valid game' do
-    end
-
     context 'for invalid game' do
       it 'should return an error for more than 10 pins input' do
         game.roll(30)
+        expect(game.errors.full_messages).to include('Invalid pin value X or x or / or - or (0 to 9)')
+      end
+
+      it 'should return error for empty string' do
+        game.roll('')
         expect(game.errors.full_messages).to include('Invalid pin value X or x or / or - or (0 to 9)')
       end
 

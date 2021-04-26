@@ -14,7 +14,8 @@ class Game < ApplicationRecord
   def pin_number_valid?(knocked_pins)
     if (knocked_pins =~ ALLOWED_PINS_REGEX) &&
        knocked_pins.to_i >= 0 &&
-       knocked_pins.to_i < MAX_ALLOWED_PINS
+       knocked_pins.to_i < MAX_ALLOWED_PINS &&
+       knocked_pins.present?
       return
     end
 
